@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.crowdfunding.cpes.dao.CertimgDao">
+
+    <select id="queryAccCertimgs" resultType="acccertimg">
+        select * from t_acc_cert_img
+    </select>
+
+    <select id="queryAll" resultType="certimg">
+        select * from t_cert_img
+    </select>
+
+    <select id="queryCertImgDatas" resultType="certimg">
+        select * from t_cert_img limit #{start}, #{pagesize}
+    </select>
+    
+    <select id="queryCertImgCount" resultType="int">
+        select count(*) from t_cert_img
+    </select>
+    
+    <select id="queryById" resultType="certimg">
+        select * from t_cert_img where id = #{id}
+    </select>
+    
+    <insert id="insertCertimg">
+        insert into t_cert_img ( name ) values ( #{name} )
+    </insert>
+    
+    <insert id="insertAccCertimg">
+        insert into t_acc_cert_img ( ciid,acctype ) values ( #{ciid},#{acctype} )
+    </insert>
+    
+    <update id="updateCertimg">
+        update t_cert_img set name = #{name} where id = #{id}
+    </update>
+    
+    <delete id="deleteCertimgs">
+        delete from t_cert_img where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach>
+    </delete>
+    
+    <delete id="deleteAccCertimg">
+        delete from t_acc_cert_img where ciid = #{ciid} and acctype = #{acctype}
+    </delete>
+
+</mapper>

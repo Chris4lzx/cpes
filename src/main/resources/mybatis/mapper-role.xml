@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.atguigu.crowdfunding.cpes.dao.RoleDao">
+	<select id="queryAll" resultType="role">
+        select * from t_role
+    </select>
+	<select id="getAllCount" resultType="java.lang.Integer">
+		select count(*)
+		from t_role;
+	</select>
+	<select id="getRolePage" resultType="role">
+		select *
+		from t_role
+		limit #{start},#{pageSize}
+	</select>
+	<select id="getrpCount" resultType="rpcnt">
+		select roleid , count(permissionid) as rpcount
+		from t_role_permission
+		where roleid in
+		<foreach collection="roles" open="(" close=")" item="role" separator=",">#{role.id}</foreach>
+		group by roleid
+	</select>
+	<select id="insertRole">
+		insert into t_role (name)
+		values(#{name})
+	</select>
+	<select id="getRoleById" resultType="role">
+		select id,name 
+		from t_role
+		where id = #{id}
+	</select>
+	<update id="updateRole">
+		update t_role
+		set name = #{name}
+		where id = #{id}
+	</update>
+	<delete id="delete">
+		delete 
+		from t_role
+		where id in <foreach collection="roles" open="(" close=")" item="role" separator=",">#{role.id}</foreach>
+	</delete>
+	<insert id="assign">
+		<foreach collection="ids" separator=";" item="permissionid">
+			insert into t_role_permission (roleid,permissionid)
+			values (${roleid},#{permissionid})
+		</foreach>	
+	</insert>
+	<delete id="deleteRP">
+		delete
+		from t_role_permission
+		where roleid = #{roleid}
+	</delete>
+</mapper>
